@@ -3,94 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Lock</title>
+    <title>System Encryption Notice</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: black;
-            color: red;
-            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            color: #ff0000;
+            font-family: 'VT323', monospace;
             text-align: center;
             margin: 0;
             padding: 0;
             overflow: hidden;
         }
 
-        #warning {
-            font-size: 3rem;
+        .container {
+            margin-top: 50px;
+        }
+
+        .header {
+            font-size: 2em;
+            text-transform: uppercase;
             font-weight: bold;
-            margin-top: 15%;
-            text-shadow: 2px 2px 10px red;
+            color: white;
+            background: red;
+            padding: 10px;
             animation: blink 1s infinite alternate;
         }
 
         @keyframes blink {
-            from { opacity: 1; }
-            to { opacity: 0.2; }
+            0% { background: red; }
+            100% { background: darkred; }
         }
 
-        #countdown {
-            font-size: 2rem;
+        .countdown {
+            font-size: 3em;
             margin-top: 20px;
             color: white;
         }
 
-        #instructions {
-            font-size: 1.5rem;
-            margin-top: 30px;
-            color: gray;
+        .file-animation {
+            width: 80%;
+            margin: 20px auto;
+            text-align: left;
+            font-size: 1.2em;
+            color: #00ff00;
+            height: 200px;
+            overflow: hidden;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            background: #000;
         }
 
-        #footer {
-            font-size: 1rem;
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            color: red;
+        .qr-code {
+            margin: 20px auto;
+            width: 200px;
+            height: 200px;
+            background: white;
         }
+
+        .pay-instructions {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            font-size: 1.2em;
+        }
+
     </style>
-    <script>
-        // Fake countdown timer
-        let timeLeft = 10; // Starts at 10 seconds
-        function startCountdown() {
-            let countdownEl = document.getElementById("countdown");
-            setInterval(function () {
-                if (timeLeft > 0) {
-                    countdownEl.innerHTML = "Your files will be deleted in: " + timeLeft + " seconds!";
-                    timeLeft--;
-                } else {
-                    countdownEl.innerHTML = "SYSTEM COMPROMISED.";
-                }
-            }, 1000);
-        }
-
-        // Optional: Play an alert sound
-        function playAlertSound() {
-            let audio = new Audio("https://www.soundjay.com/button/beep-07.wav");
-            audio.loop = true;
-            audio.play();
-        }
-
-        // Prevent closing or minimizing
-        function disableKeys(e) {
-            e.preventDefault();
-        }
-
-        function goFullscreen() {
-            document.documentElement.requestFullscreen().catch(console.log);
-        }
-
-        window.onload = function () {
-            goFullscreen();  // Force fullscreen
-            startCountdown(); // Start countdown
-            playAlertSound(); // Start scary sound
-            document.addEventListener("keydown", disableKeys); // Disable keys
-        };
-    </script>
 </head>
 <body>
-    <div id="warning">⚠️ SYSTEM LOCKED! ⚠️</div>
-    <div id="countdown">Your files will be deleted in: 10 seconds!</div>
-    <div id="instructions">DO NOT TURN OFF YOUR COMPUTER. Your files have been encrypted.</div>
-    <div id="footer">Contact security@example.com for decryption key.</div>
+
+    <div class="header">Your Files Have Been Encrypted!</div>
+
+    <div class="container">
+        <p>Your system has been compromised. Pay the ransom before the timer runs out or your files will be deleted permanently.</p>
+
+        <div class="countdown" id="countdown">24:00:00</div>
+
+        <div class="file-animation" id="file-animation"></div>
+
+        <div class="pay-instructions">Send <b>0.05 XMR</b> to the following Monero address:</div>
+        <div class="qr-code" id="qr-code">[XMR QR Code Here]</div>
+
+        <p class="footer">Failure to pay before the countdown ends will result in complete data loss.</p>
+    </div>
+
+    <script>
+        // Countdown Timer
+        function startCountdown(durationInHours) {
+            let timeLeft = durationInHours * 3600;
+
+            function updateTimer() {
+                let hours = Math.floor(timeLeft / 3600);
+                let minutes = Math.floor((timeLeft % 3600) / 60);
+                let seconds = timeLeft % 60;
+
+                document.getElementById("countdown").textContent =
+                    String(hours).padStart(2, '0') + ":" +
+                    String(minutes).padStart(2, '0') + ":" +
+                    String(seconds).padStart(2, '0');
+
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    setTimeout(updateTimer, 1000);
+                } else {
+                    document.getElementById("countdown").textContent = "00:00:00";
+                }
+            }
+            updateTimer();
+        }
+
+        startCountdown(24);
+
+        // Fake File Deletion Animation
+        const fileList = [
+            "Deleting C:\\Users\\Documents\\work.docx...",
+            "Deleting C:\\Users\\Photos\\vacation.jpg...",
+            "Deleting C:\\Users\\Desktop\\important.pdf...",
+            "Wiping system32\\config...",
+            "Encrypting user database...",
+            "Shredding personal data...",
+            "Removing security backups..."
+        ];
+
+        function startFileAnimation() {
+            let fileContainer = document.getElementById("file-animation");
+            let index = 0;
+
+            function addFile() {
+                if (index < fileList.length) {
+                    let line = document.createElement("p");
+                    line.textContent = fileList[index];
+                    fileContainer.appendChild(line);
+                    fileContainer.scrollTop = fileContainer.scrollHeight;
+                    index++;
+                    setTimeout(addFile, 1000);
+                }
+            }
+            addFile();
+        }
+
+        startFileAnimation();
+    </script>
+
 </body>
 </html>
