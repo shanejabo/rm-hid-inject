@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Lock</title>
+    <style>
+        body {
+            background-color: black;
+            color: red;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #warning {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-top: 15%;
+            text-shadow: 2px 2px 10px red;
+            animation: blink 1s infinite alternate;
+        }
+
+        @keyframes blink {
+            from { opacity: 1; }
+            to { opacity: 0.2; }
+        }
+
+        #countdown {
+            font-size: 2rem;
+            margin-top: 20px;
+            color: white;
+        }
+
+        #instructions {
+            font-size: 1.5rem;
+            margin-top: 30px;
+            color: gray;
+        }
+
+        #footer {
+            font-size: 1rem;
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            color: red;
+        }
+    </style>
+    <script>
+        // Fake countdown timer
+        let timeLeft = 10; // Starts at 10 seconds
+        function startCountdown() {
+            let countdownEl = document.getElementById("countdown");
+            setInterval(function () {
+                if (timeLeft > 0) {
+                    countdownEl.innerHTML = "Your files will be deleted in: " + timeLeft + " seconds!";
+                    timeLeft--;
+                } else {
+                    countdownEl.innerHTML = "SYSTEM COMPROMISED.";
+                }
+            }, 1000);
+        }
+
+        // Optional: Play an alert sound
+        function playAlertSound() {
+            let audio = new Audio("https://www.soundjay.com/button/beep-07.wav");
+            audio.loop = true;
+            audio.play();
+        }
+
+        // Prevent closing or minimizing
+        function disableKeys(e) {
+            e.preventDefault();
+        }
+
+        function goFullscreen() {
+            document.documentElement.requestFullscreen().catch(console.log);
+        }
+
+        window.onload = function () {
+            goFullscreen();  // Force fullscreen
+            startCountdown(); // Start countdown
+            playAlertSound(); // Start scary sound
+            document.addEventListener("keydown", disableKeys); // Disable keys
+        };
+    </script>
+</head>
+<body>
+    <div id="warning">⚠️ SYSTEM LOCKED! ⚠️</div>
+    <div id="countdown">Your files will be deleted in: 10 seconds!</div>
+    <div id="instructions">DO NOT TURN OFF YOUR COMPUTER. Your files have been encrypted.</div>
+    <div id="footer">Contact security@example.com for decryption key.</div>
+</body>
+</html>
